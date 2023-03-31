@@ -98,18 +98,18 @@ void removePosNodo(ListaSimplesmenteEncadeada<T,T2> &lista, int pos){
     }
     if(pos == 1){
         p = lista.inicio;
-        lista.inicio = lista.inicio->proximo;
-        while (p ->inicio2 != NULL)
+        while (p->inicio2 != NULL)
         {
-            q = p ->inicio2;
-            p -> inicio2 = p->inicio2->proximo;
+            q = p->inicio2;
+            p->inicio2 = p->inicio2->proximo;
             delete q;
         }
+        lista.inicio = lista.inicio->proximo;
     }
     else{
         Nodo<T,T2> *ant;
-        ant = lista.inicio;
-        for(int i=1;i<pos-1;i++){
+        p = lista.inicio;
+        for(int i=0;i<pos-1;i++){
             ant = p;
             p = p->proximo;
         }
@@ -120,6 +120,7 @@ void removePosNodo(ListaSimplesmenteEncadeada<T,T2> &lista, int pos){
             p -> inicio2 = p-> inicio2 ->proximo;
             delete q;
         }
+        lista.inicio = lista.inicio->proximo;
     }
     delete p;
     lista.cardinalidade--;
@@ -128,27 +129,28 @@ void removePosNodo(ListaSimplesmenteEncadeada<T,T2> &lista, int pos){
 template<typename T, typename T2>
 void removePosNodo2(ListaSimplesmenteEncadeada<T,T2> &lista, int pos, int pos2){
     Nodo<T,T2> *p = lista.inicio;
-    Nodo2<T, T2> *q = p->inicio2;
+    Nodo2<T, T2> *q;
     if((pos<1 or pos > lista.cardinalidade) or (pos2<1 or pos2> lista.inicio->cardinalidade))
     {
         throw "POSICAO INVALIDA";
     }
-    for(int i=1;i<pos-1;i++)
+    for(int i=0;i<pos-1;i++)
         p = p->proximo;
+    q = p->inicio2;
     if(pos2 == 1){
-        lista.inicio->inicio2 = lista.inicio->inicio2->proximo;
+        p->inicio2 = p->inicio2->proximo;
     }
     else{
-        Nodo<T,T2> *ant;
-        ant = lista.inicio;
-        for(int i=1;i<pos-1;i++){
-            ant = p;
-            p = p->proximo;
+        Nodo2<T,T2> *ant;
+        ant = q;
+        for(int i=0;i<pos2-1;i++){
+            ant = q;
+            q = q->proximo;
         }
-        ant->proximo = p->proximo2;
+        ant->proximo = q->proximo;
     }
-    delete p;
-    lista.cardinalidade--;
+    delete q;
+    lista.inicio->cardinalidade--;
 }
 
 template<typename T, typename T2>
@@ -199,16 +201,16 @@ bool verificaListaVazia(ListaSimplesmenteEncadeada<T,T2> lista){
 }
 
 template<typename T, typename T2>
-int vereficaNumElem(ListaSimplesmenteEncadeada<T,T2> lista){
+int retornaNumElem(ListaSimplesmenteEncadeada<T,T2> lista){
     return lista.cardinalidade;
 }
 
 template<typename T, typename T2>
-int retornaNumElem2 (ListaSimplesmenteEncadeada<T,T2> &lista, int pos){
+int retornaNumElem2 (ListaSimplesmenteEncadeada<T,T2> lista, int pos){
     Nodo<T,T2> *nodo = lista.inicio;
     for(int i=0;i<pos-1;i++)
         nodo = nodo->proximo;
-    return nodo.cardinalidade;
+    return nodo->cardinalidade;
 
 }
 
@@ -225,15 +227,17 @@ bool verificaElem(ListaSimplesmenteEncadeada<T,T2> lista, T elem){
 
 template<typename T, typename T2>
 bool verificaElem2(ListaSimplesmenteEncadeada<T,T2> lista, int pos, T2 elem){
-    Nodo<T,T2> *nodo = lista.inicio;
+    Nodo<T,T2> *nodo;
+    Nodo2<T,T2> *q;
+    nodo = lista.inicio;
     for(int i=0;i<pos-1;i++)
         nodo = nodo->proximo;
-
-    while (nodo->inicio2 !=NULL)
+    q = nodo->inicio2;
+    while (q !=NULL)
     {
-        if(elem == nodo->inicio2->elemento)
+        if(elem == q->elemento)
             return true;
-        nodo->inicio2 = nodo->inicio2->proximo;
+        q = q->proximo;
     }
     return false;
  }
