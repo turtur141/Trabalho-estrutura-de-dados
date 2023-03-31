@@ -61,27 +61,30 @@ void inserePosNodo(ListaSimplesmenteEncadeada<T,T2> &lista, T elem, int pos){
 }
 
 template<typename T, typename T2>
-void inserePosNodo2(Nodo<T,T2> &nodo, T2 elem, int pos){
+void inserePosNodo2(ListaSimplesmenteEncadeada<T,T2> &lista, int pos, T2 elem, int pos2){
+    Nodo<T,T2> *nodo = lista.inicio;
+    for(int i=0;i<pos-1;i++)
+        nodo = nodo->proximo;
     Nodo2<T,T2> *p;
     p = new Nodo2<T,T2>;
     p->elemento = elem;
-    if(pos<1 or pos > nodo.cardinalidade+1)
+    if(pos2<1 or pos2 > nodo->cardinalidade+1)
     {
         throw "POSICAO INVALIDA";
     }
-    if(pos == 1){
-        p->proximo = nodo.inicio2;
-        nodo.inicio2 = p;
-        nodo.cardinalidade++;
+    if(pos2 == 1){
+        p->proximo = nodo->inicio2;
+        nodo->inicio2 = p;
+        nodo->cardinalidade++;
     }
     else{
         Nodo2<T,T2> *ant;
-        ant = nodo.inicio2;
-        for(int i=1;i<pos-1;i++)
+        ant = nodo->inicio2;
+        for(int i=1;i<pos2-1;i++)
             ant = ant->proximo;
         p->proximo = ant->proximo;
         ant->proximo = p;
-        nodo.cardinalidade++;
+        nodo->cardinalidade++;
     }
 }
 
@@ -172,8 +175,9 @@ lista.cardinalidade = 0;
 template<typename T , typename T2>
 void exibe(ListaSimplesmenteEncadeada<T,T2> lista, string info){
     Nodo<T, T2> *p = lista.inicio;
-    Nodo2<T, T2> *q = p->inicio2;
+    Nodo2<T, T2> *q;
     while (p != NULL){
+        q = p->inicio2;
         cout << "\n\n"<< info<< ": " << p->elemento<<endl;
         if(q == NULL)
             cout << "Sem informacao.";
@@ -200,32 +204,40 @@ int vereficaNumElem(ListaSimplesmenteEncadeada<T,T2> lista){
 }
 
 template<typename T, typename T2>
+int retornaNumElem2 (ListaSimplesmenteEncadeada<T,T2> &lista, int pos){
+    Nodo<T,T2> *nodo = lista.inicio;
+    for(int i=0;i<pos-1;i++)
+        nodo = nodo->proximo;
+    return nodo.cardinalidade;
+
+}
+
+template<typename T, typename T2>
 bool verificaElem(ListaSimplesmenteEncadeada<T,T2> lista, T elem){
-    Nodo<T,T2> *p;
+    Nodo<T,T2> *p = lista.inicio;
     while(p!=NULL){
-        if(elem == p->elemento){
+        if(elem == p->elemento)
             return true;
-            p=p->proximo;
-        }
+        p=p->proximo;
     }
     return false;
 }
 
 template<typename T, typename T2>
-bool verificaElem2(ListaSimplesmenteEncadeada<T,T2> lista ,T2 elem){
-    Nodo<T, T2> *p;
+bool verificaElem2(ListaSimplesmenteEncadeada<T,T2> lista, int pos, T2 elem){
+    Nodo<T,T2> *nodo = lista.inicio;
+    for(int i=0;i<pos-1;i++)
+        nodo = nodo->proximo;
 
-    while (lista.inicio != NULL)
+    while (nodo->inicio2 !=NULL)
     {
-        p = lista.inicio;
-        lista.inicio = lista.inicio->proximo;
-        while (p -> lista !=NULL)
-        {
-            if(elem == p->lista)
-                return true;
-            p -> lista = p-> lista ->proximo;
-        }
+        if(elem == nodo->inicio2->elemento)
+            return true;
+        nodo->inicio2 = nodo->inicio2->proximo;
     }
     return false;
  }
+
+
+
  #endif
