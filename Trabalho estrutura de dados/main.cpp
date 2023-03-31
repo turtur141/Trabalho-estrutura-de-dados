@@ -8,7 +8,7 @@ int main()
     ListaSimplesmenteEncadeada<string,string> lista1;
     cria(lista1);
     if(verificaListaVazia(lista1))
-        cout<< "\nlista vazia orap cacete";
+        cout<< "\nlista vazia pra cacete";
     string x = "Joao";
     inserePosNodo(lista1,x,1);
     x = "Matematica";
@@ -25,22 +25,31 @@ int main()
     inserePosNodo2(lista1,2,x,1);
     x = "sociologia";
     inserePosNodo2(lista1,2,x,1);
+    exibe(lista1,"Aluno");
+    system("pause");
+    system("cls");
     x = "Roberto";
     inserePosNodo(lista1,x,2);
-    x = "oofahfoa";
+    x = "quimica";
     inserePosNodo2(lista1,2,x,1);
-    x = "açslnhpaba";
+    x = "fisica";
     inserePosNodo2(lista1,2,x,1);
-    exibe(lista1,"Aluno");
+    x = "arte";
+    inserePosNodo2(lista1,2,x,2);
     removePosNodo(lista1,1);
     x = "Artur";
     if(verificaElem(lista1,x))
-        cout<<"\nessa porra existe memsmo";
-    x = "filosofia";
+        cout<<"\n\nessa porra existe mesmo";
+    x = "quimica";
     if(verificaElem2(lista1,1,x))
-        cout<<"\nessa porra existe também menó";
+        cout<<"\n\nessa porra existe tambem meno";
+    cout << "\ncardinalidade alunos: "<< retornaNumElem(lista1);;
+    cout << "\ncardinalidade materias primeiro aluno: "<< retornaNumElem2(lista1,1);
+    removePosNodo2(lista1,2,2);
     exibe(lista1,"Aluno");
     destroi(lista1);
-    if(verificaListaVazia(lista1))
-        cout<< "\nlista vazia orap cacete";
+    if(verificaListaVazia(lista1)){
+        cout<< "\n\nlista vazia";
+    }
+    cout << "\n\nfim";
 }
