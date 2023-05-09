@@ -1,108 +1,85 @@
 #include <iostream>
-#include "listaEncadeada.h"
-#include "subrotinas.h"
+#include "PilhaDinamica.h"
+#include "Funcoes.h"
 
 using namespace std;
-void pausarelimpar();
-int justonedigit(string msg);
+
 int main()
 {
-    ListaSimplesmenteEncadeada<string,string> listaAluno;
-    ListaSimplesmenteEncadeada<string,int> listaMateria;
-    cria(listaAluno);
-    cria(listaMateria);
-    string nome = "";
-    int opcao=0;
-    do
-    {
-        opcao= -1;
-        cout << "O que desejas fazer?" << endl << endl;
-        cout << "(1) Cadastrar um aluno" << endl;
-        cout << "(2) Cadastrar uma disciplina em um aluno" << endl;
-        cout << "(3) Retirar um aluno" << endl;
-        cout << "(4) Retirar uma disciplina de um aluno" << endl;
-        cout << "(5) Mostrar todos os alunos e disciplinas" << endl;
-        cout << "(6) Mostrar todas as disciplinas de um aluno" << endl;
-        cout << "(7) Sair e apagar listas" << endl;
-        opcao = justonedigit("Opcao: "); 
-        switch(opcao){
-            case 1:
-                int pos;
-                cout << "Escreva o nome do novo Aluno: \n";
-                getline(cin,nome);
-                cout << "Escreva a posicao em que voce quer inserir: \n";
-                cin >> pos;
-                try{
-                    inserePosNodo(listaAluno,nome,pos);
-                }
-                catch(const char msg){
-                    cerr << msg << endl;
-                }
-                break;
-            case 2:
-                int pos;
-                int pos2;
-                cout << "Escreva o nome da nova materia: \n";
-                getline(cin,nome);
-                cout << "Escreva a posicao do aluno em que voce quer inserir: \n";
-                cin >> pos;
-                cout << "Escreva a posicao em que voce quer inserir a materia: \n";
-                cin >> pos2;
-                try{
-                    inserePosNodo2(listaAluno,pos,nome,pos2);
-                }
-                catch(const char msg){
-                    cerr << msg << endl;
-                }
-                if(!verificaElem(listaMateria,nome)){
-                    inserePosNodo(listaMateria,nome,1);
-                    
-                }
-                
-                break;
-            case 3:
-                cout << "Escreva a posicao em que voce quer remover o aluno: \n";
-                cin >> pos;
-                try{
-                    removePosNodo(listaAluno,pos);
-                }
-                catch(const char msg){
-                    cerr << msg << endl;
-                }
-                break;
-            case 4:
-                                int pos;
-                int pos2;
-                cout << "Escreva a posicao do aluno em que voce quer remover uma materia: \n";
-                cin >> pos;
-                cout << "Escreva a posicao em que você quer inserir a materia: \n";
-                cin >> pos2;
-                try{
-                    removePosNodo2(listaAluno,pos,pos2);
-                }
-                catch(const char msg){
-                    cerr << msg << endl;
-                }
-                break;
-            case 5:
-                nome = "Aluno";
-                exibe(listaAluno,nome);
-                break;
-            case 6:
-                break;
-            case 7:
-                system("cls");
-                cout << "Ate a proxima!!!\n\nNos de uma boa nota *-*";
-                break;
+    bool ligado = false, first = true;
+    string opcao = "";
+    PilhaDinamica<double> pilha, resultados;
+    cout << "|COMANDOS|\n\n";
+    cout << "INICIO\n";
+    cout << "ZERAR\n";
+    cout << "SOMA(X)\n";
+    cout << "SUBTRAI(X)\n";
+    cout << "MULTIPLICA(X)\n";
+    cout << "DIVIDE(X)\n";
+    cout << "PARCELAS\n";
+    cout << "IGUAL\n";
+    cout << "SAIR\n\n";
+    cout << "Digite um comando...\n";
+    while(opcao != "SAIR"){
+        cout << endl;
+        getline(cin,opcao);
+        toupperstr(opcao);
+        if(ligado == false){
+            if(opcao == "INICIO"){
+                ligado = true;
+                cria(pilha);
+                cria(resultados);
+                insere(pilha,0.0);
+                cout << "Inicializado!";
+            }
         }
-
-
-
-        if(opcao>6 or opcao==0)
-        {
-            cout << "\n\nCaractere invalido!\n\n";
-            pausarelimpar();
+        else{
+            if(opcao == "ZERAR"){
+                destroi(pilha);
+                insere(pilha,0.0);
+                cout << "Zerado!";
+            }
+            try{
+                if(opcao.substr(0,4) == "SOMA"){
+                    soma(pilha, opcao);
+                    cout << "Feito!";
+                    if(first == true)
+                        first = false;
+                    else insere(resultados,topo(pilha));
+                }
+                if(opcao.substr(0,7) == "SUBTRAI"){
+                    subtracao(pilha, opcao);
+                    cout << "Feito!";
+                    if(first == true)
+                        first = false;
+                    else insere(resultados,topo(pilha));
+                }
+                if(opcao.substr(0,10) == "MULTIPLICA"){
+                    multiplicacao(pilha, opcao);
+                    cout << "Feito!";
+                    if(first == true)
+                        first = false;
+                    else insere(resultados,topo(pilha));
+                }
+                if(opcao.substr(0,6) == "DIVIDE"){
+                    divisao(pilha, opcao);
+                    cout << "Feito!";
+                    if(first == true)
+                        first = false;
+                    else insere(resultados,topo(pilha));
+                }
+            }catch(const char* msg){
+                cerr << msg;
+            }
+            if(opcao.substr(0,5) == "IGUAL")
+                cout << topo(pilha);
+            if(opcao.substr(0,8) == "PARCELAS")
+                mostra(resultados);
         }
+        if(ligado == false)
+            cout << "Primeiro inicialize o programa!";
     }
-    while(opcao!=7);
+    destroi(pilha);
+    if(pilha.topo == NULL) 
+        cout << "\nVolte sempre!";
 }
